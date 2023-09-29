@@ -28,7 +28,7 @@ def save_video(data: dict[str, Any]) -> None:
         data (dict[str, Any]): Input JSON file with video data.
     """
     name = data.get("name")
-    description = data.get("destription")
+    description = data.get("description")
 
     features = data.get("features", [])
     has_subtitles = "DEMO_SUBTITLES" in features
