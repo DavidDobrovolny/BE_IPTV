@@ -9,7 +9,7 @@ class IptvConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "iptv"
 
-    def ready(self):
+    def ready(self) -> None:
         from iptv import api_dl
 
         if not os.environ.get("RUN_MAIN"):
@@ -20,7 +20,7 @@ class IptvConfig(AppConfig):
         except ValueError:
             loop_delay = 300
 
-        def loop():
+        def loop() -> None:
             while True:
                 print("Downloading video data")
                 api_dl.download_all()

@@ -8,6 +8,49 @@
     <body>
     <h1>Video List</h1>
 
+    <form>
+        Name:
+        <input type="text" name="search_name" value={{ search_name }}><br>
+
+        Subtitles:
+        <input type="radio" name="has_subtitles" id="subtitles_none" value="None" {% if has_subtitles == "None" %}checked{% endif %}>
+        <label for="subtitles_none">Doesn't matter</label>
+        <input type="radio" name="has_subtitles" id="subtitles_true" value="True" {% if has_subtitles == "True" %}checked{% endif %}>
+        <label for="subtitles_yes">Yes</label>
+        <input type="radio" name="has_subtitles" id="subtitles_false" value="False" {% if has_subtitles == "False" %}checked{% endif %}>
+        <label for="subtitles_false">No</label>
+        <br>
+
+        Multiple languages:
+        <input type="radio" name="is_multilingual" id="multilingual_none" value="None" {% if is_multilingual == "None" %}checked{% endif %}>
+        <label for="multilingual_none">Doesn't matter</label>
+        <input type="radio" name="is_multilingual" id="multilingual_true" value="True" {% if is_multilingual == "True" %}checked{% endif %}>
+        <label for="multilingual_yes">Yes</label>
+        <input type="radio" name="is_multilingual" id="multilingual_false" value="False" {% if is_multilingual == "False" %}checked{% endif %}>
+        <label for="multilingual_false">No</label>
+        <br>
+        
+        Quality:
+        <input type="radio" name="quality" id="quality_none" value="None" {% if quality == "None" %}checked{% endif %}>
+        <label for="quality_none">Doesn't matter</label>
+        <input type="radio" name="quality" id="quality_hd" value="HD" {% if quality == "HD" %}checked{% endif %}>
+        <label for="quality_yes">HD</label>
+        <input type="radio" name="quality" id="quality_uhd" value="UHD" {% if quality == "UHD" %}checked{% endif %}>
+        <label for="quality_false">Ultra HD</label>
+        <br>
+
+        Sort by name:
+        <input type="radio" name="sort_by" id="sort_az" value="AZ" {% if sort_by == "AZ" %}checked{% endif %}>
+        <label for="sort_az">A-Z</label>
+        <input type="radio" name="sort_by" id="sort_za" value="ZA" {% if sort_by == "ZA" %}checked{% endif %}>
+        <label for="sort_za">Z-A</label>
+        <br>
+
+        <input type="submit" name="submit" value="Search">
+    </form>
+
+    Found results: {{ videos|length }}
+
     {% for video in videos %}
     <div style='border: 1pt solid black; margin: 1em; padding: 1em'>
         <h3>{{ video.name }}</h3>
