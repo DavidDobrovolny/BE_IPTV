@@ -24,7 +24,7 @@
         {% if video.is_uhd %}<li>Ultra HD</li>{% endif %}
         </ul>
         {% endif %}
-        Last updated: {{ video.update_time }}
+        Last updated: {{ video.update_time|date:'d. m. Y H:m:s' }}
     </div>
     {% endfor %}
     
