@@ -5,7 +5,6 @@ from django.shortcuts import render
 from iptv.models import Video
 
 
-# Create your views here.
 def index(request: HttpRequest) -> HttpResponse:
     search_name = request.GET.get("search_name", "")
     has_subtitles = request.GET.get("has_subtitles", "None")
@@ -32,6 +31,18 @@ def index(request: HttpRequest) -> HttpResponse:
 
 
 def filter_subtitles(videos: QuerySet[Video], value: str) -> QuerySet[Video]:
+    """
+    Filters the videos based on whether the subtitles are present or not.
+
+    Args:
+        videos (QuerySet[Video]): QuerySet of videos to be filtered.
+        value (str): How the videos are to be filtered.
+
+    Returns (QuerySet[Video]): Filtered QuerySet of videos containing:
+        - only videos with subtitles, if value == "True",
+        - only videos without subtitles, if value == "False",
+        - all videos, otherwise.
+    """
     if value == "True":
         return videos.filter(has_subtitles=True)
     elif value == "False":
@@ -41,6 +52,18 @@ def filter_subtitles(videos: QuerySet[Video], value: str) -> QuerySet[Video]:
 
 
 def filter_multilingual(videos: QuerySet[Video], value: str) -> QuerySet[Video]:
+    """
+    Filters the videos based on whether the multiple languages are present or not.
+
+    Args:
+        videos (QuerySet[Video]): QuerySet of videos to be filtered.
+        value (str): How the videos are to be filtered.
+
+    Returns (QuerySet[Video]): Filtered QuerySet of videos containing:
+        - only videos with multiple languages, if value == "True",
+        - only videos without multiple languages, if value == "False",
+        - all videos, otherwise.
+    """
     if value == "True":
         return videos.filter(is_multilingual=True)
     elif value == "False":
@@ -50,6 +73,18 @@ def filter_multilingual(videos: QuerySet[Video], value: str) -> QuerySet[Video]:
 
 
 def filter_quality(videos: QuerySet[Video], value: str) -> QuerySet[Video]:
+    """
+    Filters the videos based on their quality.
+
+    Args:
+        videos (QuerySet[Video]): QuerySet of videos to be filtered.
+        value (str): How the videos are to be filtered.
+
+    Returns (QuerySet[Video]): Filtered QuerySet of videos containing:
+        - only videos in HD, if value == "HD",
+        - only videos in Ultra HD, if value == "UHD",
+        - all videos, otherwise.
+    """
     if value == "HD":
         return videos.filter(is_hd=True)
     elif value == "UHD":
