@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Video List</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+    <h1>Video List</h1>
+
+    {% for video in videos %}
+    <div style='border: 1pt solid black; margin: 1em; padding: 1em'>
+        <h3>{{ video.name }}</h3>
+        {% if video.description %}{{ video.description }}<br/>{% endif %}
+        {% if video.icon %}<img src={{ video.icon.url }} alt="">{% endif %}
+        <br/>
+        
+        {% if video.has_subtitles or video.is_multilingual or video.is_hd or video.is_uhd %}
+        Features:
+        <ul>
+        {% if video.has_subtitles %}<li>Subtitles</li>{% endif %}
+        {% if video.is_multilingual %}<li>Multiple languages</li>{% endif %}
+        {% if video.is_hd %}<li>HD</li>{% endif %}
+        {% if video.is_uhd %}<li>Ultra HD</li>{% endif %}
+        </ul>
+        {% endif %}
+        Last updated: {{ video.update_time }}
+    </div>
+    {% endfor %}
+    
+    </body>
+</html>
