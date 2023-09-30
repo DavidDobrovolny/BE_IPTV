@@ -45,7 +45,8 @@ def filter_subtitles(videos: QuerySet[Video], value: str) -> QuerySet[Video]:
     """
     if value == "True":
         return videos.filter(has_subtitles=True)
-    elif value == "False":
+
+    if value == "False":
         return videos.filter(has_subtitles=False)
 
     return videos
@@ -66,7 +67,8 @@ def filter_multilingual(videos: QuerySet[Video], value: str) -> QuerySet[Video]:
     """
     if value == "True":
         return videos.filter(is_multilingual=True)
-    elif value == "False":
+
+    if value == "False":
         return videos.filter(is_multilingual=False)
 
     return videos
@@ -87,7 +89,8 @@ def filter_quality(videos: QuerySet[Video], value: str) -> QuerySet[Video]:
     """
     if value == "HD":
         return videos.filter(is_hd=True)
-    elif value == "UHD":
+
+    if value == "UHD":
         return videos.filter(is_uhd=True)
 
     return videos
