@@ -1,4 +1,5 @@
 import io
+import logging
 import os
 from typing import Any
 
@@ -10,11 +11,18 @@ from .models import Video
 def download_all() -> None:
     """
     Downloads and saves all videos from the API.
+    If the request fails or returns with HTTP error downloading is skipped.
     """
     API_URL = os.environ.get("API_URL")
-    assert API_URL is not None
+    assert API_URL is not None, "API URL was not provided in the environment variable"
 
-    result = requests.get(API_URL)
+    try:
+        result = requests.get(API_URL)
+        result.raise_for_status()
+    except (requests.exceptions.RequestException, requests.exceptions.HTTPError) as e:
+        logging.warning(f"API request failed. Reason: {e}")
+        return
+
     for video in result.json():
         save_video(video)
 
@@ -23,11 +31,15 @@ def save_video(data: dict[str, Any]) -> None:
     """
     Saves the video data given in JSON into the database,
     downloads the icon and saves the modification time.
+    If the video name is empty, ignores the video.
 
     Args:
         data (dict[str, Any]): Input JSON file with video data.
     """
     name = data.get("name")
+    if not name:
+        return
+
     description = data.get("description")
 
     features = data.get("features", [])
@@ -48,8 +60,7 @@ def save_video(data: dict[str, Any]) -> None:
         },
     )
 
-    icon_uri = data.get("iconUri")
-    if icon_uri and (icon := download_icon(icon_uri)):
+    if (icon_uri := data.get("iconUri")) and (icon := download_icon(icon_uri)):
         new_video.icon.delete()
         new_video.icon.save(icon_uri.split("/")[-1], icon)
 
@@ -63,18 +74,13 @@ def download_icon(uri: str) -> io.BytesIO | None:
     Args:
         uri (str): URI to download the icon from.
 
-    Returns (io.BytesIO): binary file-like object containing the icon
+    Returns (io.BytesIO): binary file-like object containing the icon or None if request fails
 
     """
-    if not uri:
-        return None
-
     try:
         result = requests.get(uri, stream=True)
-    except requests.exceptions.ConnectionError:
+        result.raise_for_status()
+    except (requests.exceptions.RequestException, requests.exceptions.HTTPError):
         return None
 
-    if result.status_code == 200:
-        return io.BytesIO(result.content)
-
-    return None
+    return io.BytesIO(result.content)
